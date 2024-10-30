@@ -1,34 +1,41 @@
 plugins {
-  //inlude the nodeJS plugin to execute nodejs and npm tasks
-  id "com.moowork.node" version "1.2.0"
+    // Include the Node.js plugin to execute Node.js and npm tasks
+    id "com.moowork.node" version "1.2.0"
+    id "java" // Include the Java plugin
 }
 
 node {
-	version = "14.19.3"
-	distBaseUrl = 'https://direct.nodejs.org/dist/'
-	download = true
-	npmVersion = "7.0.0"
+    version = "14.19.3"
+    distBaseUrl = 'https://direct.nodejs.org/dist/'
+    download = true
+    npmVersion = "7.0.0"
 }
 
-//declare a build task
+// Set Java version compatibility
+java {
+    sourceCompatibility = JavaVersion.VERSION_17 // or JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_17 // or JavaVersion.VERSION_21
+}
+
+// Declare a build task
 task build
 
-//declare a task to create a zip of the app
+// Declare a task to create a zip of the app
 task zip(type: Zip) {
-	from ('.') {
-		include "*"
-		include "bin/**"
-		include "data/**"
-		include "node_modules/**"
-		include "public/**"
-		include "routes/**"
-		include "views/**"
-	}
-	destinationDir(file("dist"))
-	baseName "trainSchedule"
+    from ('.') {
+        include "*"
+        include "bin/**"
+        include "data/**"
+        include "node_modules/**"
+        include "public/**"
+        include "routes/**"
+        include "views/**"
+    }
+    destinationDir(file("dist"))
+    baseName "trainSchedule"
 }
 
-//declare task dependencies
+// Declare task dependencies
 build.dependsOn zip
 zip.dependsOn npm_build
 npm_build.dependsOn npm_test
